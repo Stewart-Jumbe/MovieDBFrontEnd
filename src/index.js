@@ -6,11 +6,7 @@ class MovieGenreRow extends React.Component {
   render() {
     const genre = this.props.genre;
 
-    return (
-      <tr>
-        <th colSpan="1">{genre}</th>
-      </tr>
-    );
+    return <tr>{/* <th colSpan="20">{genre}</th> */}</tr>;
   }
 }
 
@@ -20,8 +16,14 @@ class MovieRow extends React.Component {
 
     return (
       <tr>
+        {/* Table Data being called */}
+        <td>{movie.genre} </td>
+
         <td>{movie.title}</td>
+
         <td>{movie.star_rating}</td>
+
+        <td>{movie.release_year}</td>
       </tr>
     );
   }
@@ -46,9 +48,12 @@ class MovieTable extends React.Component {
       <table>
         <thead>
           <tr>
-            <th> Genre</th>
+            <th> Genre </th>
+
             <th> Title</th>
+
             <th> Rating</th>
+
             <th> Release Year</th>
           </tr>
         </thead>
@@ -72,6 +77,12 @@ class SearchBar extends React.Component {
             </option>
             <option value="" selected="selected">
               Fantasy
+            </option>
+            <option value="" selected="selected">
+              Other
+            </option>
+            <option value="" selected="selected">
+              Drama
             </option>
           </select>
         </p>
@@ -111,6 +122,16 @@ class FilterableMovieTable extends React.Component {
     );
   }
 }
+
+const SPECIFICMOVIE = [
+  {
+    title: "ACADEMY DINOSAUR",
+    user_review: "Its a must watch",
+    star_rating: "5",
+    genre: "Action",
+    release_year: "2006",
+  },
+];
 
 const MOVIES = [
   {
