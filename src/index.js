@@ -82,6 +82,7 @@ class MovieTable extends React.Component {
             <th> Release Year</th>
             <th> Length (min)</th>
             <th> Film ID</th>
+            <th> Film Review</th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>
@@ -102,6 +103,11 @@ class MovieRow extends React.Component {
         <td>{moviedata.star_rating}</td>
         <td>{moviedata.release_year}</td>
         <td>{moviedata.length}</td>
+        <td>
+          {moviedata.userReview.map((filmReview) => (
+            <div> {filmReview.user_review}</div>
+          ))}
+        </td>
         <td>{moviedata.film_id}</td>
       </tr>
     );
