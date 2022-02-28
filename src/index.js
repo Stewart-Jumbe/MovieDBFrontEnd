@@ -51,6 +51,7 @@ class MovieTable extends React.Component {
   }
 
   componentDidMount() {
+    // Getting data from localhost or api and storing the data set in the state filmpackages
     axios
       .get("http://localhost:8080/home/All_Films")
       .then((response) => this.setState({ filmPackages: response.data }));
@@ -58,9 +59,15 @@ class MovieTable extends React.Component {
 
   render() {
     const movie = this.state.filmPackages;
-
     const rows = [];
+    const filterText = this.props.filterText.toLowerCase();
+
+    // looping through the filmPackages array and appending the data rows array and pushing the data to the MovieRow class
+    // by feeding the movie and film_id data as parameters of the MovieRows class
     this.state.filmPackages.forEach((movie) => {
+      if (movie.title.toLowerCase().indexOf(filterText) === -1) {
+        return;
+      }
       console.log(movie);
       rows.push(<MovieRow movieinfo={movie} key={movie.film_id} />);
     });
@@ -89,16 +96,11 @@ class MovieRow extends React.Component {
 
     return (
       <tr>
-        {/* sada */}
         {/* Table Data being called */}
         <td>{moviedata.description} </td>
-
         <td>{moviedata.title}</td>
-
         <td>{moviedata.star_rating}</td>
-
         <td>{moviedata.release_year}</td>
-
         <td>{moviedata.length}</td>
         <td>{moviedata.film_id}</td>
       </tr>
@@ -144,9 +146,17 @@ class SiteNavigation extends React.Component {
 //Creating the search bar
 class SearchBar extends React.Component {
   render() {
+    const filterText = this.props.filterText;
     return (
       <form>
-        <input type="text" placeholder="Search Movie..." />
+        <input
+          type="text"
+          placeholder="Search Movie..."
+          value={filterText}
+          onChange={(userInput) =>
+            this.props.onFilterTextChange(userInput.target.value)
+          }
+        />
 
         <div className="Category Dropdown">
           <Dropdown>
@@ -184,18 +194,41 @@ class SearchBar extends React.Component {
 }
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filterText: "",
+    };
+
+    //Binding
+    this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+  }
+
+  //Creating function to read user input
+
+  handleFilterTextChange(FT) {
+    this.setState({
+      filterText: FT,
+    });
+  }
+
   render() {
     return (
-      <container fluid>
-        <div>
-          <SearchBar />
-          <MovieTable movies={this.props.movies} />
-          <br></br>
-          <SiteNavigation />
-          <br></br>
-          {/* <SpecificMovieTable specific_movie={this.props.specific_movie} /> */}
-        </div>
-      </container>
+      <div>
+        <SearchBar
+          filterText={this.state.filterText}
+          onFilterTextChange={this.handleFilterTextChange}
+        />
+
+        <MovieTable
+          movies={this.props.movies}
+          filterText={this.state.filterText}
+        />
+        <br></br>
+        <SiteNavigation />
+        <br></br>
+        {/* <SpecificMovieTable specific_movie={this.props.specific_movie} /> */}
+      </div>
     );
   }
 }
@@ -212,46 +245,42 @@ const SPECIFICMOVIE = [
 ];
 
 const MOVIES = [
-  {
-    genre: "Action",
-    title: "ACADEMY DINOSAUR",
-    star_rating: "5",
-    release_year: "2006",
-    length: "140",
-  },
-
-  {
-    genre: "Action",
-    title: "BRINGING HYSTERICAL ",
-    star_rating: "1",
-    release_year: "2006",
-    length: "150",
-  },
-
-  {
-    genre: "Action",
-    title: "ACE GOLDFINGER",
-    star_rating: "2",
-    release_year: "2006",
-    length: "120",
-  },
-
-  {
-    genre: "Fantasy",
-    title: "ADAPTATION HOLES",
-    star_rating: "3",
-    release_year: "2006",
-    length: "130",
-  },
-
-  {
-    genre: "Drama",
-    title: "AFFAIR PREJUDICE",
-    star_rating: "5",
-    release_year: "2006",
-    length: "160",
-  },
+  // {
+  //   genre: "Action",
+  //   title: "ACADEMY DINOSAUR",
+  //   star_rating: "5",
+  //   release_year: "2006",
+  //   length: "140",
+  // },
+  // {
+  //   genre: "Action",
+  //   title: "BRINGING HYSTERICAL ",
+  //   star_rating: "1",
+  //   release_year: "2006",
+  //   length: "150",
+  // },
+  // {
+  //   genre: "Action",
+  //   title: "ACE GOLDFINGER",
+  //   star_rating: "2",
+  //   release_year: "2006",
+  //   length: "120",
+  // },
+  // {
+  //   genre: "Fantasy",
+  //   title: "ADAPTATION HOLES",
+  //   star_rating: "3",
+  //   release_year: "2006",
+  //   length: "130",
+  // },
+  // {
+  //   genre: "Drama",
+  //   title: "AFFAIR PREJUDICE",
+  //   star_rating: "5",
+  //   release_year: "2006",
+  //   length: "160",
+  // },
 ];
 
 //Renders the FiterableMovieTable
-ReactDOM.render(<App movies={MOVIES} />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById("root"));
