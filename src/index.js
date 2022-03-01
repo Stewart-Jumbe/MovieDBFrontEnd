@@ -74,20 +74,22 @@ class MovieTable extends React.Component {
     });
 
     return (
-      <table>
-        <thead>
-          <tr>
-            <th> Genre </th>
-            <th> Title</th>
-            <th> Rating</th>
-            <th> Release Year</th>
-            <th> Length (min)</th>
-            <th> Film ID</th>
-            <th> Film Review</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
+      <div className="MovieTable">
+        <table>
+          <thead>
+            <tr>
+              <th> Genre </th>
+              <th> Title</th>
+              <th> Rating</th>
+              <th> Release Year</th>
+              <th> Length (min)</th>
+              <th> Film ID</th>
+              <th> Film Review</th>
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </table>
+      </div>
     );
   }
 }
@@ -119,12 +121,7 @@ class Post extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const data = {
-      film_film_id: this.state.film_film_id,
-      user_review: this.state.user_review,
-      star_rating: this.state.star_rating,
-    };
-    console.log(data);
+
     axios
       .post(
         "http://localhost:8080/home/Add_Review?film_film_id=" +
@@ -195,7 +192,10 @@ class MovieRow extends React.Component {
         <td>
           {/* map function to loop through reviews */}
           {moviedata.userReview.map((filmReview) => (
-            <div class="reviews">{filmReview.user_review}</div>
+            <div class="reviews">
+              {filmReview.user_review} <br></br>
+              Review ID: {filmReview.user_review_id}
+            </div>
           ))}
         </td>
       </tr>
