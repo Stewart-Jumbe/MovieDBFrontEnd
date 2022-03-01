@@ -8,6 +8,7 @@ import { render } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import axios from "axios";
+import { useState } from "react";
 
 //
 class MovieGenreRow extends React.Component {
@@ -91,6 +92,88 @@ class MovieTable extends React.Component {
   }
 }
 
+class Post extends React.Component {
+  state = {
+    film_film_id: "",
+    user_review: "",
+    star_rating: " ",
+  };
+
+  onFilmIDChange = (e) => {
+    this.setState({
+      film_film_id: e.target.value,
+    });
+  };
+
+  onUserReviewChange = (e) => {
+    this.setState({
+      user_review: e.target.value,
+    });
+  };
+
+  onStarRatingChange = (e) => {
+    this.setState({
+      star_rating: e.target.value,
+    });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const data = {
+      film_film_id: this.state.film_film_id,
+      user_review: this.state.user_review,
+      star_rating: this.state.star_rating,
+    };
+    console.log(data);
+    axios
+      .post(
+        "http://localhost:8080/home/Add_Review?film_film_id=" +
+          this.state.film_film_id +
+          "&user_review=" +
+          this.state.user_review +
+          "&star_rating=" +
+          this.state.star_rating
+      )
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
+  };
+
+  render() {
+    return (
+      <div className="post">
+        <form className="post" onSubmit={this.handleSubmit}>
+          <input
+            placeholder="Film ID"
+            value={this.state.film_film_id}
+            onChange={this.onFilmIDChange}
+            required
+          />
+          <br></br>
+          <input
+            placeholder="Review"
+            value={this.state.user_review}
+            onChange={this.onUserReviewChange}
+            required
+          />
+          <br></br>
+          <input
+            placeholder="Rating"
+            value={this.state.star_rating}
+            onChange={this.onStarRatingChange}
+            required
+          />
+          <br></br>
+
+          <button type="submit">Create Post</button>
+        </form>
+        <br></br>
+      </div>
+    );
+  }
+}
+
+export default Post;
+
 class MovieRow extends React.Component {
   render() {
     const moviedata = this.props.movieinfo;
@@ -98,17 +181,23 @@ class MovieRow extends React.Component {
     return (
       <tr>
         {/* Table Data being called */}
-        <td>{moviedata.description} </td>
+        <td>
+          {moviedata.category.map((fimGenre) => (
+            <div>{fimGenre.name}</div>
+          ))}
+        </td>
+
         <td>{moviedata.title}</td>
         <td>{moviedata.star_rating}</td>
         <td>{moviedata.release_year}</td>
         <td>{moviedata.length}</td>
+        <td>{moviedata.film_id}</td>
         <td>
+          {/* map function to loop through reviews */}
           {moviedata.userReview.map((filmReview) => (
-            <div> {filmReview.user_review}</div>
+            <div class="reviews">{filmReview.user_review}</div>
           ))}
         </td>
-        <td>{moviedata.film_id}</td>
       </tr>
     );
   }
@@ -142,13 +231,65 @@ class SiteNavigation extends React.Component {
   render() {
     return (
       <div>
-        <Button variant="primary">Add Film</Button>{" "}
         <Button variant="secondary">Update Review</Button>{" "}
         <Button variant="success">Delete Review</Button>{" "}
       </div>
     );
   }
 }
+
+// function MyForm() {
+//   const [title, setTitle] = useState("");
+//   const [rating, setRating] = useState("");
+
+//   return (
+//     <form>
+//       <label>
+//         Enter Title
+//         <input
+//           type="text"
+//           value={title}
+//           onChange={(e) => setTitle(e.target.value)}
+//         />
+//       </label>
+//       <label>
+//         <li>Enter Rating</li>
+//         <input
+//           type="text"
+//           value={rating}
+//           onChange={(e) => setRating(e.target.value)}
+//         />
+//       </label>
+//     </form>
+//   );
+// }
+
+// class AddFilm extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.handleAddFilmClick = this.handleAddFilmClick.bind(this);
+//     this.state = { isAddingFilm: false };
+//   }
+//   handleAddFilmClick() {
+//     this.setState({ isAddingFilm: true });
+//   }
+
+//   render() {
+//     const isAddingFilm = this.state.isAddingFilm;
+//     let button;
+
+//     if (isAddingFilm) {
+//       button = <AddFilmButton onClick={this.handleAddFilmClick} />;
+//     }
+
+//     return (
+//       <div>
+//         <Button variant="primary">Add</Button>{" "}
+//       </div>
+//     );
+//   }
+// }
+
 //Creating the search bar
 class SearchBar extends React.Component {
   render() {
@@ -225,13 +366,15 @@ class App extends React.Component {
           filterText={this.state.filterText}
           onFilterTextChange={this.handleFilterTextChange}
         />
+        <SiteNavigation />
+        <Post />
 
         <MovieTable
           movies={this.props.movies}
           filterText={this.state.filterText}
         />
         <br></br>
-        <SiteNavigation />
+
         <br></br>
         {/* <SpecificMovieTable specific_movie={this.props.specific_movie} /> */}
       </div>
