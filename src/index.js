@@ -1,14 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Dropdown } from "react-bootstrap";
-import { render } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import axios from "axios";
-import { useState } from "react";
 
 //
 class MovieGenreRow extends React.Component {
@@ -169,8 +165,6 @@ class Post extends React.Component {
   }
 }
 
-export default Post;
-
 class Delete extends React.Component {
   state = {
     Review_ID: "",
@@ -207,6 +201,95 @@ class Delete extends React.Component {
     );
   }
 }
+
+class PutRequest extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      user_review_id: "",
+      user_review: "",
+      star_rating: " ",
+      updatedAt: null,
+    };
+  }
+
+  onFilmIDChange = (e) => {
+    this.setState({
+      user_review_id: e.target.value,
+    });
+  };
+
+  onUserReviewChange = (e) => {
+    this.setState({
+      user_review: e.target.value,
+    });
+  };
+
+  onStarRatingChange = (e) => {
+    this.setState({
+      star_rating: e.target.value,
+    });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    // PUT request using axios with error handling
+
+    axios
+      .put(
+        "http://localhost:8080/home/updatereview/" +
+          this.state.user_review_id +
+          "?user_review=" +
+          this.state.user_review +
+          "&star_rating=" +
+          this.state.star_rating
+      )
+      // .then((response) => {
+      //   this.setState({ updatedAt: response.data.updatedAt }),
+      //     console.log(response.data);
+      // });
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
+  };
+
+  render() {
+    const { errorMessage } = this.state;
+    return (
+      <div className="put">
+        <form className="put" onSubmit={this.handleSubmit}>
+          <input
+            placeholder="Review ID"
+            value={this.state.user_review_id}
+            onChange={this.onFilmIDChange}
+            required
+          />
+          <br></br>
+          <input
+            placeholder="Review"
+            value={this.state.user_review}
+            onChange={this.onUserReviewChange}
+            required
+          />
+          <br></br>
+          <input
+            placeholder="Rating"
+            value={this.state.star_rating}
+            onChange={this.onStarRatingChange}
+            required
+          />
+          <br></br>
+
+          <button type="submit">Update Post</button>
+        </form>
+        <br></br>
+      </div>
+    );
+  }
+}
+
+//export { PutRequest };
 
 class MovieRow extends React.Component {
   render() {
@@ -331,6 +414,7 @@ class App extends React.Component {
         <SiteNavigation />
         <Post />
         <Delete />
+        <PutRequest />
         <MovieTable
           movies={this.props.movies}
           filterText={this.state.filterText}
