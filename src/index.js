@@ -49,8 +49,9 @@ class MovieTable extends React.Component {
 
   componentDidMount() {
     // Getting data from localhost or api and storing the data set in the state filmpackages
+
     axios
-      .get("http://localhost:8080/home/All_Films")
+      .get("http://3.94.6.234:8080/home/All_Films")
       .then((response) => this.setState({ filmPackages: response.data }));
   }
 
@@ -76,7 +77,7 @@ class MovieTable extends React.Component {
             <tr>
               <th> Genre </th>
               <th> Title</th>
-              <th> Rating</th>
+              {/* <th> Rating</th> */}
               <th> Release Year</th>
               <th> Length (min)</th>
               <th> Film ID</th>
@@ -90,7 +91,7 @@ class MovieTable extends React.Component {
   }
 }
 
-class Post extends React.Component {
+class PostRequest extends React.Component {
   state = {
     film_film_id: "",
     user_review: "",
@@ -120,7 +121,7 @@ class Post extends React.Component {
 
     axios
       .post(
-        "http://localhost:8080/home/Add_Review?film_film_id=" +
+        "http://3.94.6.234:8080/home/Add_Review?film_film_id=" +
           this.state.film_film_id +
           "&user_review=" +
           this.state.user_review +
@@ -129,6 +130,7 @@ class Post extends React.Component {
       )
       .then((response) => console.log(response))
       .catch((err) => console.log(err));
+    window.location.reload(false); // reloading the window after submission
   };
 
   render() {
@@ -157,7 +159,7 @@ class Post extends React.Component {
           />
           <br></br>
 
-          <button type="submit">Create Post</button>
+          <button type="submit">Submit</button>
         </form>
         <br></br>
       </div>
@@ -165,7 +167,7 @@ class Post extends React.Component {
   }
 }
 
-class Delete extends React.Component {
+class DeleteRequest extends React.Component {
   state = {
     Review_ID: "",
   };
@@ -179,12 +181,13 @@ class Delete extends React.Component {
 
     axios
       .delete(
-        `http://localhost:8080/home/Remove_Review/${this.state.Review_ID}`
+        `http://3.94.6.234:8080/home/Remove_Review/${this.state.Review_ID}`
       )
       .then((response) => {
         console.log(response);
         console.log(response.data);
       });
+    window.location.reload(false); // reloading the window after submission
   };
 
   render() {
@@ -235,27 +238,24 @@ class PutRequest extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    // PUT request using axios with error handling
+    // PUT request
 
     axios
       .put(
-        "http://localhost:8080/home/updatereview/" +
+        "http://3.94.6.234:8080/home/updatereview/" +
           this.state.user_review_id +
           "?user_review=" +
           this.state.user_review +
           "&star_rating=" +
           this.state.star_rating
       )
-      // .then((response) => {
-      //   this.setState({ updatedAt: response.data.updatedAt }),
-      //     console.log(response.data);
-      // });
+
       .then((response) => console.log(response))
       .catch((err) => console.log(err));
+    window.location.reload(false); // reloading the window after submission
   };
 
   render() {
-    const { errorMessage } = this.state;
     return (
       <div className="put">
         <form className="put" onSubmit={this.handleSubmit}>
@@ -280,8 +280,7 @@ class PutRequest extends React.Component {
             required
           />
           <br></br>
-
-          <button type="submit">Update Post</button>
+          <button type="submit">Update Review</button>
         </form>
         <br></br>
       </div>
@@ -305,7 +304,8 @@ class MovieRow extends React.Component {
         </td>
 
         <td>{moviedata.title}</td>
-        <td>{moviedata.star_rating}</td>
+        <td></td>
+
         <td>{moviedata.release_year}</td>
         <td>{moviedata.length}</td>
         <td>{moviedata.film_id}</td>
@@ -315,22 +315,24 @@ class MovieRow extends React.Component {
             <div class="reviews">
               {filmReview.user_review} <br></br>
               Review ID: {filmReview.user_review_id}
+              <br></br>
+              Rating: {filmReview.star_rating}
             </div>
           ))}
+
+          <br></br>
+          <b> Leave a review: </b>
+          <PostRequest />
+
+          <br></br>
+          <b> Update a review: </b>
+          <PutRequest />
+
+          <br></br>
+          <b> Delete a review: </b>
+          <DeleteRequest />
         </td>
       </tr>
-    );
-  }
-}
-
-//class SiteNavigation
-class SiteNavigation extends React.Component {
-  render() {
-    return (
-      <div>
-        <Button variant="secondary">Update Review</Button>{" "}
-        <Button variant="success">Delete Review</Button>{" "}
-      </div>
     );
   }
 }
@@ -411,71 +413,15 @@ class App extends React.Component {
           filterText={this.state.filterText}
           onFilterTextChange={this.handleFilterTextChange}
         />
-        <SiteNavigation />
-        <Post />
-        <Delete />
-        <PutRequest />
         <MovieTable
           movies={this.props.movies}
           filterText={this.state.filterText}
         />
         <br></br>
-
-        <br></br>
-        {/* <SpecificMovieTable specific_movie={this.props.specific_movie} /> */}
       </div>
     );
   }
 }
 
-const SPECIFICMOVIE = [
-  {
-    title: "ACADEMY DINOSAUR",
-    user_review: "Its a must watch",
-    star_rating: "5",
-    genre: "Action",
-    release_year: "2006",
-    length: "120",
-  },
-];
-
-const MOVIES = [
-  // {
-  //   genre: "Action",
-  //   title: "ACADEMY DINOSAUR",
-  //   star_rating: "5",
-  //   release_year: "2006",
-  //   length: "140",
-  // },
-  // {
-  //   genre: "Action",
-  //   title: "BRINGING HYSTERICAL ",
-  //   star_rating: "1",
-  //   release_year: "2006",
-  //   length: "150",
-  // },
-  // {
-  //   genre: "Action",
-  //   title: "ACE GOLDFINGER",
-  //   star_rating: "2",
-  //   release_year: "2006",
-  //   length: "120",
-  // },
-  // {
-  //   genre: "Fantasy",
-  //   title: "ADAPTATION HOLES",
-  //   star_rating: "3",
-  //   release_year: "2006",
-  //   length: "130",
-  // },
-  // {
-  //   genre: "Drama",
-  //   title: "AFFAIR PREJUDICE",
-  //   star_rating: "5",
-  //   release_year: "2006",
-  //   length: "160",
-  // },
-];
-
-//Renders the FiterableMovieTable
+//Renders the Movie App
 ReactDOM.render(<App />, document.getElementById("root"));
