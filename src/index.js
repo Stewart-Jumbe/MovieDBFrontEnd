@@ -51,7 +51,7 @@ class MovieTable extends React.Component {
     // Getting data from localhost or api and storing the data set in the state filmpackages
 
     axios
-      .get("http://3.94.6.234:8080/home/All_Films")
+      .get("http://54.80.165.5:8080/home/All_Films")
       .then((response) => this.setState({ filmPackages: response.data }));
   }
 
@@ -121,7 +121,7 @@ class PostRequest extends React.Component {
 
     axios
       .post(
-        "http://3.94.6.234:8080/home/Add_Review?film_film_id=" +
+        "http://54.80.165.5:8080/home/Add_Review?film_film_id=" +
           this.state.film_film_id +
           "&user_review=" +
           this.state.user_review +
@@ -139,7 +139,7 @@ class PostRequest extends React.Component {
         <form className="post" onSubmit={this.handleSubmit}>
           <input
             placeholder="Film ID"
-            value={this.state.film_film_id}
+            //value={this.state.film_film_id}
             onChange={this.onFilmIDChange}
             required
           />
@@ -181,7 +181,7 @@ class DeleteRequest extends React.Component {
 
     axios
       .delete(
-        `http://3.94.6.234:8080/home/Remove_Review/${this.state.Review_ID}`
+        `http://54.80.165.5:8080/home/Remove_Review/${this.state.Review_ID}`
       )
       .then((response) => {
         console.log(response);
@@ -242,7 +242,7 @@ class PutRequest extends React.Component {
 
     axios
       .put(
-        "http://3.94.6.234:8080/home/updatereview/" +
+        "http://54.80.165.5:8080/home/updatereview/" +
           this.state.user_review_id +
           "?user_review=" +
           this.state.user_review +
