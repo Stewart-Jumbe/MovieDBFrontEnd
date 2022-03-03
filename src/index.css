@@ -1,14 +1,28 @@
+/* to change background */
 body {
   background-color: white;
 }
 
 th,
 td {
-  padding: 15px;
+  padding: 10px;
 
   border: 1px solid;
 }
 
 .reviews {
   padding: 5px;
+}
+
+.top {
+  background-image: url("https://www.pngkit.com/png/detail/17-175707_reels-and-gtel-moviereelsandpopcorn-movie-reel-and-popcorn.png");
+
+  /* background-repeat: no-repeat; */
+}
+
+.SearchBar input {
+  position: absolute;
+  left: 30%;
+  top: 10%;
+  width: 50%;
 }

@@ -77,7 +77,7 @@ class MovieTable extends React.Component {
             <tr>
               <th> Genre </th>
               <th> Title</th>
-              {/* <th> Rating</th> */}
+              <th> Description</th>
               <th> Release Year</th>
               <th> Length (min)</th>
               <th> Film ID</th>
@@ -304,7 +304,7 @@ class MovieRow extends React.Component {
         </td>
 
         <td>{moviedata.title}</td>
-        <td></td>
+        <td>{moviedata.description}</td>
 
         <td>{moviedata.release_year}</td>
         <td>{moviedata.length}</td>
@@ -319,18 +319,6 @@ class MovieRow extends React.Component {
               Rating: {filmReview.star_rating}
             </div>
           ))}
-
-          <br></br>
-          <b> Leave a review: </b>
-          <PostRequest />
-
-          <br></br>
-          <b> Update a review: </b>
-          <PutRequest />
-
-          <br></br>
-          <b> Delete a review: </b>
-          <DeleteRequest />
         </td>
       </tr>
     );
@@ -342,46 +330,29 @@ class SearchBar extends React.Component {
   render() {
     const filterText = this.props.filterText;
     return (
-      <form>
-        <input
-          type="text"
-          placeholder="Search Movie..."
-          value={filterText}
-          onChange={(userInput) =>
-            this.props.onFilterTextChange(userInput.target.value)
-          }
-        />
-
-        <div className="Category Dropdown">
-          <Dropdown>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
-              Choose Category
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-              <Dropdown.Item href="#/action-1">Fantasy</Dropdown.Item>
-              <Dropdown.Item href="#/action-1">Drama</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+      <form className="top">
+        <div className="SearchBar">
+          <input
+            type="text"
+            placeholder="Search Movie..."
+            value={filterText}
+            onChange={(userInput) =>
+              this.props.onFilterTextChange(userInput.target.value)
+            }
+          />
         </div>
+
         <br></br>
+        <b> Leave a review: </b>
+        <PostRequest />
 
-        <div className="Rating Dropdown">
-          <Dropdown>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
-              Choose Rating
-            </Dropdown.Toggle>
+        <br></br>
+        <b> Update a review: </b>
+        <PutRequest />
 
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">5 stars</Dropdown.Item>
-              <Dropdown.Item href="#/action-1">4 stars</Dropdown.Item>
-              <Dropdown.Item href="#/action-1">3 stars</Dropdown.Item>
-              <Dropdown.Item href="#/action-1">2 stars</Dropdown.Item>
-              <Dropdown.Item href="#/action-1">1 stars</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
+        <br></br>
+        <b> Delete a review: </b>
+        <DeleteRequest />
       </form>
     );
   }
