@@ -329,17 +329,17 @@ class SearchBar extends React.Component {
   render() {
     const filterText = this.props.filterText;
     return (
-      //className="top"
-      <form>
-        {/* className="SearchBar" */}
-        <input
-          type="text"
-          placeholder="Search Movie..."
-          value={filterText}
-          onChange={(userInput) =>
-            this.props.onFilterTextChange(userInput.target.value)
-          }
-        />
+      <form className="top">
+        <div className="SearchBar">
+          <input
+            type="text"
+            placeholder="Search Movie..."
+            value={filterText}
+            onChange={(userInput) =>
+              this.props.onFilterTextChange(userInput.target.value)
+            }
+          />
+        </div>
       </form>
     );
   }
