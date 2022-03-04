@@ -1,44 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Dropdown } from "react-bootstrap";
 import "./index.css";
 import axios from "axios";
-
-//
-class MovieGenreRow extends React.Component {
-  render() {
-    const genre = this.props.genre;
-
-    return <tr>{/* <th colSpan="20">{genre}</th> */}</tr>;
-  }
-}
-
-//Pointing rows to data
-class SpecificMovieRow extends React.Component {
-  render() {
-    const specific_movie = this.props.specific_movie;
-
-    return (
-      <tr>
-        {/* Table Data being called */}
-
-        <td>{specific_movie.title}</td>
-
-        <td>{specific_movie.genre} </td>
-
-        <td>{specific_movie.user_review}</td>
-
-        <td>{specific_movie.star_rating}</td>
-
-        <td>{specific_movie.release_year}</td>
-
-        <td>{specific_movie.length}</td>
-      </tr>
-    );
-  }
-}
 
 //Creating movie table
 class MovieTable extends React.Component {
@@ -92,12 +56,15 @@ class MovieTable extends React.Component {
 }
 
 class PostRequest extends React.Component {
+  // Stating variables variables that I expect to change
+  //managing change
   state = {
     film_film_id: "",
     user_review: "",
     star_rating: " ",
   };
 
+  // State will update to hold user input
   onFilmIDChange = (e) => {
     this.setState({
       film_film_id: e.target.value,
@@ -116,9 +83,11 @@ class PostRequest extends React.Component {
     });
   };
 
+  //preventing window from refreshing before sending data
   handleSubmit = (e) => {
     e.preventDefault();
 
+    // sending user input as POST request to JAVA api
     axios
       .post(
         "http://54.80.165.5:8080/home/Add_Review?film_film_id=" +
@@ -130,9 +99,24 @@ class PostRequest extends React.Component {
       )
       .then((response) => console.log(response))
       .catch((err) => console.log(err));
-    window.location.reload(false); // reloading the window after submission
+
+    function delay(delayInms) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(2);
+        }, delayInms);
+      });
+    }
+
+    async function sample() {
+      console.log("waiting...");
+      let delayres = await delay(100);
+      window.location.reload(false);
+    }
+    sample();
   };
 
+  // specifying what should be displayed to user
   render() {
     return (
       <div className="post">
@@ -181,13 +165,14 @@ class DeleteRequest extends React.Component {
 
     axios
       .delete(
-        `http://54.80.165.5:8080/home/Remove_Review/${this.state.Review_ID}`
+        "http://54.80.165.5:8080/home/Remove_Review/" + this.state.Review_ID
       )
       .then((response) => {
         console.log(response);
         console.log(response.data);
       });
-    window.location.reload(false); // reloading the window after submission
+
+    window.location.reload(false);
   };
 
   render() {
@@ -252,7 +237,21 @@ class PutRequest extends React.Component {
 
       .then((response) => console.log(response))
       .catch((err) => console.log(err));
-    window.location.reload(false); // reloading the window after submission
+
+    function delay(delayInms) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(2);
+        }, delayInms);
+      });
+    }
+
+    async function sample() {
+      console.log("waiting...");
+      let delayres = await delay(100);
+      window.location.reload(false);
+    }
+    sample();
   };
 
   render() {
@@ -312,7 +311,7 @@ class MovieRow extends React.Component {
         <td>
           {/* map function to loop through reviews */}
           {moviedata.userReview.map((filmReview) => (
-            <div class="reviews">
+            <div className="reviews">
               {filmReview.user_review} <br></br>
               Review ID: {filmReview.user_review_id}
               <br></br>
@@ -330,29 +329,17 @@ class SearchBar extends React.Component {
   render() {
     const filterText = this.props.filterText;
     return (
-      <form className="top">
-        <div className="SearchBar">
-          <input
-            type="text"
-            placeholder="Search Movie..."
-            value={filterText}
-            onChange={(userInput) =>
-              this.props.onFilterTextChange(userInput.target.value)
-            }
-          />
-        </div>
-
-        <br></br>
-        <b> Leave a review: </b>
-        <PostRequest />
-
-        <br></br>
-        <b> Update a review: </b>
-        <PutRequest />
-
-        <br></br>
-        <b> Delete a review: </b>
-        <DeleteRequest />
+      //className="top"
+      <form>
+        {/* className="SearchBar" */}
+        <input
+          type="text"
+          placeholder="Search Movie..."
+          value={filterText}
+          onChange={(userInput) =>
+            this.props.onFilterTextChange(userInput.target.value)
+          }
+        />
       </form>
     );
   }
@@ -384,6 +371,18 @@ class App extends React.Component {
           filterText={this.state.filterText}
           onFilterTextChange={this.handleFilterTextChange}
         />
+        <br></br>
+        <b> Leave a review: </b>
+        <PostRequest />
+
+        <br></br>
+        <b> Update a review: </b>
+        <PutRequest />
+
+        <br></br>
+        <b> Delete a review: </b>
+        <DeleteRequest />
+        <br></br>
         <MovieTable
           movies={this.props.movies}
           filterText={this.state.filterText}
